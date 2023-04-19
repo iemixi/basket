@@ -7,11 +7,12 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        File file = new File("basket.txt");
+        File file = new File("basket.bin");
 
         Basket basket;
         if (file.exists()) {
-            basket = Basket.loadFromTxtFile(file);
+            basket = Basket.loadFromBin(file);
+            basket.printCart();
         } else {
             basket = new Basket(new long[]{1, 2, 3}, new String[]{"Рис", "Хлеб", "Молоко"});
         }
@@ -38,7 +39,7 @@ public class Main {
                     if (!basket.addToCart(productNumber, amount)) {
                         System.out.println("Неверно указан товар или его количество");
                     } else {
-                        basket.saveTxt(file);
+                        basket.saveBin(file);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Неверный формат данных.");

@@ -107,4 +107,35 @@ public class Basket {
             throw new RuntimeException(e);
         }
     }
+
+    public void saveBin(File binFile) {
+        try {
+            ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(binFile));
+
+            writer.writeObject(prices);
+            writer.writeObject(products);
+            writer.writeObject(productsAmount);
+
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Basket loadFromBin(File binFile) {
+        try {
+            ObjectInputStream reader = new ObjectInputStream(new FileInputStream(binFile));
+
+            long[] prices = (long[]) reader.readObject();
+            String[] productNames = (String[]) reader.readObject();
+            long[] productsAmount = (long[]) reader.readObject();
+
+            reader.close();
+            return new Basket(prices, productNames, productsAmount);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
