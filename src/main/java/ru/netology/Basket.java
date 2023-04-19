@@ -23,6 +23,13 @@ public class Basket {
         this.productsAmount = productsAmount;
     }
 
+    public void printStock() {
+        System.out.println("Ассортимент:");
+        for (int i = 0; i < products.length; ++i) {
+            System.out.printf("%d. %s %dр./шт.\n", i + 1, products[i], prices[i]);
+        }
+    }
+
     public boolean addToCart(int productNum, int amount) {
         if (productNum < 1 || productNum > productsAmount.length) {
             return false;
