@@ -9,7 +9,7 @@ public class Basket {
 
     private final long[] productsAmount;
 
-    Basket(long[] prices, String[] products) {
+    public Basket(long[] prices, String[] products) {
         this.prices = prices;
         this.products = products;
 
@@ -17,7 +17,7 @@ public class Basket {
         Arrays.fill(productsAmount, 0);
     }
 
-    Basket(long[] prices, String[] products, long[] productsAmount) {
+    public Basket(long[] prices, String[] products, long[] productsAmount) {
         this.prices = prices;
         this.products = products;
         this.productsAmount = productsAmount;
@@ -65,9 +65,7 @@ public class Basket {
     }
 
     public void saveTxt(File textFile) {
-        try {
-            PrintWriter printWriter = new PrintWriter(textFile);
-
+        try (PrintWriter printWriter = new PrintWriter(textFile)) {
             for (long price : prices) {
                 printWriter.print(price + " ");
             }
@@ -82,17 +80,13 @@ public class Basket {
                 printWriter.print(amount + " ");
             }
             printWriter.println();
-
-            printWriter.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static Basket loadFromTxtFile(File textFile) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(textFile));
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(textFile))) {
             String[] pricesInString = reader.readLine().split(" ");
             String[] productNames = reader.readLine().split(" ");
             String[] productsAmountInString = reader.readLine().split(" ");
