@@ -3,7 +3,7 @@ package ru.netology;
 import java.io.*;
 import java.util.Arrays;
 
-public class Basket {
+public class Basket implements Serializable {
     private final long[] prices;
     private final String[] products;
 
@@ -109,32 +109,22 @@ public class Basket {
     }
 
     public void saveBin(File binFile) {
-        try {
-            ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(binFile));
+        try (ObjectOutputStream writer =
+                     new ObjectOutputStream(new FileOutputStream(binFile))) {
 
-            writer.writeObject(prices);
-            writer.writeObject(products);
-            writer.writeObject(productsAmount);
+            writer.writeObject(this);
 
-            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static Basket loadFromBin(File binFile) {
-        try {
-            ObjectInputStream reader = new ObjectInputStream(new FileInputStream(binFile));
+        try (ObjectInputStream reader =
+                     new ObjectInputStream(new FileInputStream(binFile))) {
 
-            long[] prices = (long[]) reader.readObject();
-            String[] productNames = (String[]) reader.readObject();
-            long[] productsAmount = (long[]) reader.readObject();
-
-            reader.close();
-            return new Basket(prices, productNames, productsAmount);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+            return (Basket) reader.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
